@@ -21,9 +21,11 @@ shape = SubResource( 1 )
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0 )
 current = true
+fov = 90.0
 
 [node name="CharacterMover" type="Spatial" parent="."]
 script = ExtResource( 2 )
+max_speed = 20
 jump_force = 20
 
 [node name="HealthManager" type="Spatial" parent="."]

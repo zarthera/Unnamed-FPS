@@ -20,8 +20,8 @@ func _ready():
 	health_manager.connect("dead", self, "kill")
 
 func _process(delta):
-	if Input.is_action_just_pressed("exit"):
-		get_tree().quit()
+	if Input.is_action_just_pressed("tilde"):
+		OS.window_fullscreen = !OS.window_fullscreen
 	
 	if dead:
 		return
