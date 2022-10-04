@@ -39,33 +39,11 @@ skeleton = NodePath("../..")
 [node name="CollisionShape" type="CollisionShape" parent="Environment/Ground/StaticBody"]
 shape = SubResource( 3 )
 
-[node name="Boxes" type="Spatial" parent="Environment"]
-
-[node name="Spatial" parent="Environment/Boxes" instance=ExtResource( 4 )]
-transform = Transform( 2.8615, 0, 0, 0, 0.812597, 0, 0, 0, 1, 0, 1.34147, -6.92394 )
-
-[node name="Spatial2" parent="Environment/Boxes" instance=ExtResource( 4 )]
-transform = Transform( 2.8615, 0, 0, 0, 0.812597, 0, 0, 0, 1, 0, 3.99994, -1.94837 )
-
-[node name="Spatial3" parent="Environment/Boxes" instance=ExtResource( 4 )]
-transform = Transform( 2.32267, 0, -0.58408, 0, 0.812597, 0, 1.67134, 0, 0.811696, 0, 6.14445, 5.19012 )
-
-[node name="Spatial4" parent="Environment/Boxes" instance=ExtResource( 4 )]
-transform = Transform( 1.01268, 0, -0.254657, 0, 0.812597, 0, 0.941768, 0, 0.457374, -4.08354, 6.73701, 9.45169 )
-
-[node name="Spatial5" parent="Environment/Boxes" instance=ExtResource( 4 )]
-transform = Transform( 1.01268, 0, -0.254657, 0, 0.812597, 0, 0.941768, 0, 0.457374, -11.1222, 8.13363, 9.45169 )
-
-[node name="Spatial6" parent="Environment/Boxes" instance=ExtResource( 4 )]
-transform = Transform( 1.80363, 0, -0.453559, 0, 0.812597, 0, 1.17526, 0, 0.57077, -11.1222, 10.0222, 3.54124 )
-
-[node name="Spatial7" parent="Environment/Boxes" instance=ExtResource( 4 )]
-transform = Transform( 1.80363, 0, -0.453559, 0, 0.812597, 0, 1.17526, 0, 0.57077, -11.1222, 12.3134, -1.65243 )
-
-[node name="Spatial8" parent="Environment/Boxes" instance=ExtResource( 4 )]
-transform = Transform( 1.80363, 0, -0.453559, 0, 0.812597, 0, 1.17526, 0, 0.57077, -7.65518, 13.6583, -7.57849 )
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 5 )
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0241413, 0.0293159, 0.045212 )
+
+[node name="Spatial" parent="." instance=ExtResource( 4 )]
+transform = Transform( 3.46872, 0, 0, 0, 1.67723, 0, 0, 0, 1, 0, 1.41221, -6.82547 )

@@ -2,7 +2,6 @@ extends Spatial
 
 var body_to_move : KinematicBody = null
 
-
 export var move_accel = 4
 export var max_speed = 25
 var drag = 0.0
@@ -43,11 +42,9 @@ func _physics_process(delta):
 	
 	var grounded = body_to_move.is_on_floor()
 	if !body_to_move.is_on_floor():
-		print('not on ground')
 		coyoteTime()
 		
 	if grounded:
-		print("On Ground")
 		coyote_jump = true
 		if pressed_jump:
 			velocity.y = jump_force
@@ -57,7 +54,6 @@ func _physics_process(delta):
 		pressed_jump = true
 		rememberJumpTime()
 		if coyote_jump:
-			print("coyote jumped")
 			velocity.y = jump_force
 		
 	if pressed_jump:
