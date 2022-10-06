@@ -37,6 +37,7 @@ func _ready():
 	character_mover.init(self)
 	health_manager.init()
 	health_manager.connect("dead", self, "kill")
+	weapon_manager.init($Camera/FirePoint, [self])
 
 func _process(delta):
 	if Input.is_action_just_pressed("tilde"):
@@ -53,6 +54,7 @@ func _process(delta):
 		move_vec += Vector3.LEFT
 	if Input.is_action_pressed("move_right"):
 		move_vec += Vector3.RIGHT
+	weapon_manager.attack(Input.is_action_pressed("attack"))
 	character_mover.set_move_vec(move_vec)
 	
 	handle_leaning(delta)

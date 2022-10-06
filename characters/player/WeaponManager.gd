@@ -1,17 +1,19 @@
 extends Spatial
 
 
-enum WEAPON_SLOTS {MELEE, PISTOL, SHOTGUN, ROCKET}
+enum WEAPON_SLOTS {MELEE, PISTOL, SHOTGUN}
 var slots_unlocked = {
 	WEAPON_SLOTS.MELEE: true,
 	WEAPON_SLOTS.PISTOL: true,
 	WEAPON_SLOTS.SHOTGUN: true,
-	WEAPON_SLOTS.ROCKET: true,
+	#WEAPON_SLOTS.ROCKET: true,
 }
 
 onready var weapons = $Weapons.get_children()
-onready var current_slot = 0
-onready var current_weapon = weapons[0]
+var current_slot = 0
+var current_weapon = null
+var fire_point : Spatial 
+var bodies_to_exclude : Array = []
 
 var mouse_move_x
 var mouse_move_y
@@ -25,15 +27,18 @@ export var sway_up : Vector3
 export var sway_down : Vector3
 export var sway_normal : Vector3
 
-func _ready():
-	pass
-
+func init(_fire_point: Spatial, _bodies_to_exclude: Array):
+	fire_point = _fire_point
+	bodies_to_exclude = _bodies_to_exclude
+	for weapon in weapons:
+		if weapon.has_method("init"):
+			weapon.init(_fire_point, _bodies_to_exclude)
+	switch_to_weapon_slot(WEAPON_SLOTS.MELEE)
+	
 func _input(event):
 	if event is InputEventMouseMotion:
 		mouse_move_x = -event.relative.x
 		mouse_move_y = -event.relative.y
-		
-		
 
 func _process(delta):	
 	if mouse_move_x != null:
@@ -58,8 +63,15 @@ func _process(delta):
 			for weapon in weapons:
 				weapon.rotation = weapon.rotation.linear_interpolate(sway_normal, sway_lerp * delta)
 		mouse_move_y = 0
-	if Input.is_action_just_pressed("left_click"):
-		attack()
+		
+		for weapon in weapons:
+			if weapon.name == "Melee" and Input.is_action_just_pressed("attack"):
+				$Weapons/Melee/AnimationPlayer.play("Attack")
+				
+
+func attack(attack_input_pressed: bool):
+	if current_weapon.has_method("attack"):
+		current_weapon.attack(attack_input_pressed)
 
 func switch_to_next_weapon():
 	#If index is higher than the slot index it will wrap around to 0
@@ -84,7 +96,8 @@ func switch_to_weapon_slot(slot_index: int):
 		return
 	disable_all_weapons()
 	current_weapon = weapons[slot_index]
-	if current_weapon.has_method("set_inactive"):
+	print(current_weapon.name)
+	if current_weapon.has_method("set_active"):
 		current_weapon.set_active()
 	else:
 		current_weapon.show()
@@ -96,7 +109,3 @@ func disable_all_weapons():
 		else:
 			weapon.hide()
 
-func attack():
-	for weapon in weapons:
-		weapon.get_node("AnimationPlayer").play("Attack")
-		

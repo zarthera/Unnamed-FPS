@@ -1,12 +1,19 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://characters/player/PlayerScript.gd" type="Script" id=1]
 [ext_resource path="res://characters/CharacterMover.gd" type="Script" id=2]
 [ext_resource path="res://characters/HealthManager.gd" type="Script" id=3]
 [ext_resource path="res://characters/player/WeaponManager.gd" type="Script" id=4]
+[ext_resource path="res://Weapons/HitscanBulletEmitter.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Weapons/9mm.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Weapons/raw_assets/BlackMetal.material" type="Material" id=7]
 [ext_resource path="res://Weapons/raw_assets/Wood.material" type="Material" id=8]
 [ext_resource path="res://Weapons/raw_assets/ShinyMetal.material" type="Material" id=9]
+[ext_resource path="res://Weapons/Pistol.gd" type="Script" id=10]
+[ext_resource path="res://Effects/MuzzleFlash.gd" type="Script" id=11]
+[ext_resource path="res://Weapons/Weapon.gd" type="Script" id=12]
+[ext_resource path="res://Weapons/raw_assets/muzzleflash1.glb" type="PackedScene" id=13]
+[ext_resource path="res://Weapons/raw_assets/muzzleflash2.glb" type="PackedScene" id=14]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.5
@@ -250,6 +257,8 @@ cull_mask = 1048573
 current = true
 fov = 100.0
 
+[node name="FirePoint" type="Spatial" parent="Camera"]
+
 [node name="WeaponManager" type="Spatial" parent="Camera"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0356025, -0.321857, -0.627677 )
 script = ExtResource( 4 )
@@ -263,13 +272,14 @@ sway_normal = Vector3( 0, -0.1, 0 )
 
 [node name="Melee" type="Spatial" parent="Camera/WeaponManager/Weapons"]
 transform = Transform( 0.198623, 0, 0, 0, 0.198623, 0, 0, 0, 0.198623, 0.252705, 0.0455394, 0.367482 )
+visible = false
 
 [node name="GFX" type="Spatial" parent="Camera/WeaponManager/Weapons/Melee"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.843184, 0.128908, 0.425445 )
 
 [node name="Machete" type="MeshInstance" parent="Camera/WeaponManager/Weapons/Melee/GFX"]
 transform = Transform( 1, 7.45058e-09, 2.6077e-08, 0, 1, 0, -5.58794e-09, 0, 1, 0, 0, 0 )
-visible = false
+layers = 2
 mesh = SubResource( 3 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Camera/WeaponManager/Weapons/Melee"]
@@ -278,16 +288,45 @@ anims/Attack = SubResource( 4 )
 anims/Idle = SubResource( 5 )
 anims/RESET = SubResource( 6 )
 
+[node name="Pistol" type="Spatial" parent="Camera/WeaponManager/Weapons"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.187788, 0, 0.336559 )
+visible = false
+script = ExtResource( 10 )
+
+[node name="9mm" parent="Camera/WeaponManager/Weapons/Pistol" instance=ExtResource( 6 )]
+transform = Transform( -0.15, 0, -1.31134e-08, 0, 0.15, 0, 1.31134e-08, 0, -0.15, 0, 0, 0 )
+
+[node name="BulletEmitters" type="Spatial" parent="Camera/WeaponManager/Weapons/Pistol"]
+visible = false
+
+[node name="HitscanBulletEmitter" parent="Camera/WeaponManager/Weapons/Pistol/BulletEmitters" instance=ExtResource( 5 )]
+
+[node name="MuzzleFlash" type="Spatial" parent="Camera/WeaponManager/Weapons/Pistol"]
+transform = Transform( 1.51712, 0, 0, 0, 1.51712, 0, 0, 0, 1.51712, -0.000696152, 0.19425, -0.185397 )
+script = ExtResource( 11 )
+
+[node name="muzzleflash1" parent="Camera/WeaponManager/Weapons/Pistol/MuzzleFlash" instance=ExtResource( 13 )]
+transform = Transform( -0.2, 0, -3.01992e-08, 0, 0.2, 0, 3.01992e-08, 0, -0.2, 0.0072192, 0, 0 )
+
 [node name="Shotgun" type="Spatial" parent="Camera/WeaponManager/Weapons"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.287005, 0.0180422, 0.425871 )
+script = ExtResource( 12 )
+ammo = 6
+attack_rate = 1.0
 
 [node name="GFX" type="Spatial" parent="Camera/WeaponManager/Weapons/Shotgun"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="Shotgun" type="MeshInstance" parent="Camera/WeaponManager/Weapons/Shotgun/GFX"]
 transform = Transform( 0.662, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
-layers = 3
+layers = 2
 mesh = SubResource( 2 )
+
+[node name="MuzzleFlash" type="Spatial" parent="Camera/WeaponManager/Weapons/Shotgun/GFX"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0691744, -0.973834 )
+script = ExtResource( 11 )
+
+[node name="muzzleflash2" parent="Camera/WeaponManager/Weapons/Shotgun/GFX/MuzzleFlash" instance=ExtResource( 14 )]
+transform = Transform( -0.5, 0, -4.37114e-08, 0, 0.5, 0, 4.37114e-08, 0, -0.5, 0, 0, 0 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Camera/WeaponManager/Weapons/Shotgun"]
 root_node = NodePath("../GFX")
@@ -295,6 +334,23 @@ autoplay = "Idle"
 anims/Attack = SubResource( 9 )
 anims/Idle = SubResource( 7 )
 anims/RESET = SubResource( 8 )
+
+[node name="BulletEmitters" type="Spatial" parent="Camera/WeaponManager/Weapons/Shotgun"]
+
+[node name="HitscanBulletEmitter" parent="Camera/WeaponManager/Weapons/Shotgun/BulletEmitters" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0362642, 0.0242885, -0.957292 )
+
+[node name="HitscanBulletEmitter2" parent="Camera/WeaponManager/Weapons/Shotgun/BulletEmitters" instance=ExtResource( 5 )]
+transform = Transform( 0.999048, -0.00114182, -0.0436044, 0, 0.999657, -0.0261769, 0.0436194, 0.026152, 0.998706, -0.0362642, 0.0242885, -0.957292 )
+
+[node name="HitscanBulletEmitter3" parent="Camera/WeaponManager/Weapons/Shotgun/BulletEmitters" instance=ExtResource( 5 )]
+transform = Transform( 0.999048, -0.00114182, 0.0436044, 0, 0.999657, 0.0261769, -0.0436194, -0.026152, 0.998706, -0.0362642, 0.0242885, -0.957292 )
+
+[node name="HitscanBulletEmitter4" parent="Camera/WeaponManager/Weapons/Shotgun/BulletEmitters" instance=ExtResource( 5 )]
+transform = Transform( 0.996195, 0.00380168, -0.0870728, 0, 0.999048, 0.0436194, 0.0871557, -0.0434534, 0.995247, -0.0362642, 0.0242885, -0.957292 )
+
+[node name="HitscanBulletEmitter5" parent="Camera/WeaponManager/Weapons/Shotgun/BulletEmitters" instance=ExtResource( 5 )]
+transform = Transform( 0.996195, 0.00380168, 0.0870728, 0, 0.999048, -0.0436194, -0.0871557, 0.0434534, 0.995247, -0.0362642, 0.0242885, -0.957292 )
 
 [node name="ViewportContainer" type="ViewportContainer" parent="Camera"]
 anchor_right = 1.0
@@ -318,3 +374,6 @@ jump_force = 20
 
 [node name="HealthManager" type="Spatial" parent="."]
 script = ExtResource( 3 )
+
+[connection signal="fired" from="Camera/WeaponManager/Weapons/Pistol" to="Camera/WeaponManager/Weapons/Pistol/MuzzleFlash" method="flash"]
+[connection signal="fired" from="Camera/WeaponManager/Weapons/Shotgun" to="Camera/WeaponManager/Weapons/Shotgun/GFX/MuzzleFlash" method="flash"]

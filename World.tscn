@@ -24,7 +24,9 @@ background_mode = 2
 background_sky = SubResource( 4 )
 background_sky_custom_fov = 60.0
 background_energy = 2.08
-ambient_light_energy = 16.0
+ambient_light_energy = 10.68
+tonemap_mode = 3
+auto_exposure_scale = 0.33
 
 [node name="World" type="Spatial"]
 
